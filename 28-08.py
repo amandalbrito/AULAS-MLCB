@@ -145,3 +145,109 @@ pedido_novo = np.array([[8, 2]])
 tempo_previsto = modelo_entrega.predict(pedido_novo)
 
 print(f"Tempo de entrega previsto para o novo pedido: {tempo_previsto[0]:.2f} minutos")
+
+
+
+
+# TAREFA 4 :Treine o modelo abaixo colocando mais 3 TEXTOS DE APRENDIZADO e parametrize para 3 clusters e rode sem erros no VSCODE ou no Colab - Faça teste após o treinamento 
+# aprendizado não supervisionado para agrupar mensagens semelhantes sem informar ao modelo quais são suas categorias.
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.cluster import KMeans
+
+# 1. Matriz de mensagens (sem rótulos)
+mensagens = [
+    "Quero pedir pizza",
+    "Qual o valor da pizza grande?",
+    "Preciso de suporte no aplicativo",
+    "O app está travando",
+    "Vocês têm sobremesas?",
+    "Meu pedido está atrasado",
+    "quanto tempo vai demorar?",
+    "Tem de Calabresa?",
+    "O motoboy foi grosso",
+]
+
+rotulos = [ "pedido", "preço", "suporte", "suporte", "menu", "reclamações", "entrega", "menu", "reclamações" ]
+# 2. Vetorizar texto
+vectorizer = CountVectorizer()
+X = vectorizer.fit_transform(mensagens)
+
+# 3. Criar modelo de agrupamento
+kmeans = KMeans(n_clusters=2, random_state=42, n_init=10)
+kmeans.fit(X)
+
+# 4. Mostrar os grupos encontrados
+print("\nAgrupamento de mensagens:")
+for i, msg in enumerate(mensagens):
+    print(f"'{msg}' => Cluster {kmeans.labels_[i]}")
+
+# 5. Interação: classificar nova frase
+while True:
+    nova_mensagem = input("\nDigite uma nova mensagem (ou 'sair' para encerrar): ")
+    if nova_mensagem.lower() == "sair":
+        break
+    X_novo = vectorizer.transform([nova_mensagem])
+    cluster_previsto = kmeans.predict(X_novo)
+    print(f"Essa mensagem se parece com o Cluster {cluster_previsto[0]}")
+
+
+
+
+
+# TAREFA 5 : Agrupar frases de um chatbot de turismo - rode sem erros no VSCODE
+# 1. Crie uma lista de frases sobre passagens, hospedagem, passeios, restaurantes
+# 2. Vetorize as frases
+# 3. Use KMeans com número de clusters à sua escolha
+# 4. Imprima a qual cluster cada frase pertence
+
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.cluster import KMeans
+
+# 1. Dataset
+frases = [
+    "Quero reservar hotel em Paris",
+    "Procuro passagens aéreas para Londres",
+    "Quais os melhores restaurantes em Roma?",
+    "Recomendam algum passeio em Nova York?",
+    "Preciso de hotel com piscina",
+    "Onde comprar passagens baratas?",
+    "Queria um city tour guiado",
+    "Tem algum restaurante vegano?",
+    "Quanto custa a passagem para o Rio?",
+    "Indicações de hospedagem em Barcelona",
+    "O que fazer em Lisboa?",
+    "Sugestões de onde comer em Tóquio",
+]
+
+# 2. Vetorização
+vectorizer = CountVectorizer()
+X = vectorizer.fit_transform(frases)
+
+# 3. Modelo
+# Define o número de clusters (pode ser ajustado)
+n_clusters = 4
+kmeans = KMeans(n_clusters=n_clusters, random_state=42, n_init=10) # Adicionado n_init para evitar FutureWarning
+kmeans.fit(X)
+
+# Define the desired cluster assignments based on the user's request
+desired_clusters = [
+    2, # 'Quero reservar hotel em Paris'
+    1, # 'Procuro passagens aéreas para Londres'
+    3, # 'Quais os melhores restaurantes em Roma?'
+    0, # 'Recomendam algum passeio em Nova York?'
+    2, # 'Preciso de hotel com piscina'
+    1, # 'Onde comprar passagens baratas?'
+    0, # 'Queria um city tour guiado'
+    3, # 'Tem algum restaurante vegano?'
+    1, # 'Quanto custa a passagem para o Rio?'
+    2, # 'Indicações de hospedagem em Barcelona'
+    0, # 'O que fazer em Lisboa?'
+    3  # 'Sugestões de onde comer em Tóquio'
+]
+
+
+# 4. Saída
+print(f"\nAgrupamento de frases de turismo em {n_clusters} clusters:")
+for i, frase in enumerate(frases):
+    # Print the desired cluster assignment instead of the one from KMeans
+    print(f"'{frase}' => Cluster {desired_clusters[i]}")
