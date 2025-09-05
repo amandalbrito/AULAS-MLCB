@@ -79,4 +79,102 @@ print(f"Previsão de preço para um imóvel de 16m² com 3 quartos: R$ {preco_pr
 #print("Complete o código acima!")
 print("-" * 50, "\n")
 
+#EXEC-03
+
+import numpy as np
+from sklearn.cluster import KMeans
+
+print("--- Exercício 3 -  Missão 2 (Aprendizado Supervisionado) ---")
+
+clientes = np.array([
+    [30, 1], [45, 2], [35, 1], # Grupo de baixo valor/frequência
+    [4000, 8], [500, 2], [550, 9] # Grupo de alto valor/frequência
+])
+
+kmeans = KMeans(n_clusters=2, random_state=42, n_init=10)
+
+clusters_encontrados = kmeans.fit_predict(clientes)
+
+print(f"Dados dos clientes (sem rótulos):\n{clientes}")
+print(f"Clusters encontrados pelo KMeans para cada cliente: {clusters_encontrados}")
+print("Observe como o algoritmo separou corretamente os clientes nos grupos 0 e 1.")
+print("-" * 50, "\n")
+
+#EXEC-04
+
+import numpy as np
+from sklearn.cluster import KMeans
+
+print("--- Exercício 4 -  Missão 2 (Aprendizado Não Supervisionado) ---")
+
+# Dados: [valor_transacao, hora_do_dia (0-23)]
+transacoes = np.array([
+    [15.50, 14], [30.00, 10], [12.75, 11],
+    [50.20, 19], [20005.00, 9],
+    [2500.00, 3] # Uma transação muito alta e de madrugada -> suspeita
+])
+
+kmeans = KMeans(n_clusters=2, random_state=42, n_init=10)
+modelo_anomalia = kmeans
+
+# TODO: Treine e preveja os clusters para os dados de transações.
+clusters_transacoes = kmeans.fit_predict(transacoes)
+
+print(f"Clusters para as transações: {clusters_transacoes}")
+print("A transação anômala é aquela que está em um cluster isolado!")
+print("Complete o código acima!")
+print("-" * 50, "\n")
+
+#EXEC-05
+
+import time
+
+POSICAO_INICIAL = 0
+POSICAO_COMIDA = 10
+recompensa_total = 0
+
+# O agente começa na posição inicial.
+posicao_agente = POSICAO_INICIAL
+
+print("--- Iniciando a Simulação do PERSONAGEM COMILÃO ---")
+print(f"O agente começa na posição {posicao_agente} e quer chegar na comida na posição {POSICAO_COMIDA}.")
+print("-" * 30)
+
+# O agente tem no máximo 10 passos para tentar chegar à comida.
+for passo in range(10):
+    print(f"Passo {passo + 1}:")
+    posicao_agente += 1
+
+    # O agente sempre toma a mesma AÇÃO: mover para a 'direita'.
+    acao_agente = 'direita'
+    print(f"   -> Ação do Agente: '{acao_agente}'")
+
+    # ======================================================================
+    # CONSTRUA A LÓGICA DO AMBIENTE
+    # ======================================================================
+
+    # Calcule a recompensa do passo
+    recompensa_do_passo = -1
+    if posicao_agente == POSICAO_COMIDA:
+        recompensa_do_passo = +20
+
+    # Atualize a recompensa total
+    recompensa_total += recompensa_do_passo
+
+    # Exibe o resultado do passo
+    print(f"   <- Resposta do Ambiente: Nova Posição={posicao_agente}, Recompensa={recompensa_do_passo}")
+
+    # Verifique se o jogo terminou
+    if posicao_agente == POSICAO_COMIDA:
+        print("chegou na comida")
+        break
+
+    # Pausa para visualização
+    time.sleep(1)
+    print("-" * 30)
+
+print("-" * 30)
+print(f"Simulação Finalizada! Recompensa total acumulada: {recompensa_total}")
+
+
 
